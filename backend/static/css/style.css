@@ -344,7 +344,7 @@ body {
     border-top: 1px solid #e0e0e0;
 }
 
-.resend-email-btn {
+.send-email-btn, .resend-email-btn {
     background: #2196f3;
     color: white;
     border: none;
@@ -357,11 +357,11 @@ body {
     width: 100%;
 }
 
-.resend-email-btn:hover {
+.send-email-btn:hover, .resend-email-btn:hover {
     background: #1976d2;
 }
 
-.resend-email-btn:disabled {
+.send-email-btn:disabled, .resend-email-btn:disabled {
     background: #ccc;
     cursor: not-allowed;
 }

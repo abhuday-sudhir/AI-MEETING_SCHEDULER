@@ -42,12 +42,8 @@ def schedule():
         
         if result.get("participants"):
             result["emails"] = resolve_emails(result["participants"])
-            
-            # Send confirmation emails if meeting intent is detected
-            if result.get("intent_detected") and result.get("emails"):
-                email_result = send_meeting_confirmation(result, result["emails"])
-                result["email_confirmation"] = email_result
         
+        # Don't send emails automatically - just return the analysis results
         return jsonify(result)
     except Exception as e:
         return jsonify({"error": str(e)}), 500

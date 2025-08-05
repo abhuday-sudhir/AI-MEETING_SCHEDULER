@@ -130,28 +130,6 @@ function displayAIResults(result) {
     const meetingTitle = result.meeting_title || 'Team Meeting';
     const location = result.location || 'Not specified';
 
-    let emailConfirmationHtml = '';
-    if (result.email_confirmation) {
-        const emailResult = result.email_confirmation;
-        if (emailResult.success) {
-            emailConfirmationHtml = `
-                <div class="email-confirmation success">
-                    <h4>📧 Email Confirmation Sent</h4>
-                    <p>✅ Confirmation emails sent to ${emailResult.total_participants} participants</p>
-                    <p><strong>Sent to:</strong> ${emailResult.sent_emails.join(', ')}</p>
-                    ${emailResult.message ? `<p><em>${emailResult.message}</em></p>` : ''}
-                </div>
-            `;
-        } else {
-            emailConfirmationHtml = `
-                <div class="email-confirmation error">
-                    <h4>📧 Email Confirmation Failed</h4>
-                    <p>❌ ${emailResult.error}</p>
-                </div>
-            `;
-        }
-    }
-
     content.innerHTML = `
         <div class="ai-result">
             <h3>🎯 Meeting Analysis Results</h3>
@@ -185,11 +163,10 @@ function displayAIResults(result) {
                     <span>${result.intent_detected ? '✅ Detected' : '❌ Not detected'}</span>
                 </div>
             </div>
-            ${emailConfirmationHtml}
             ${result.intent_detected && result.emails ? `
                 <div class="action-buttons">
-                    <button class="resend-email-btn" onclick="resendConfirmationEmails(${JSON.stringify(result).replace(/"/g, '&quot;')})">
-                        📧 Resend Confirmation Emails
+                    <button class="send-email-btn" onclick="sendConfirmationEmails(${JSON.stringify(result).replace(/"/g, '&quot;')})">
+                        📧 Send Confirmation Emails
                     </button>
                 </div>
             ` : ''}
@@ -197,7 +174,7 @@ function displayAIResults(result) {
     `;
 }
 
-function resendConfirmationEmails(meetingData) {
+function sendConfirmationEmails(meetingData) {
     const btn = event.target;
     btn.disabled = true;
     btn.textContent = '⏳ Sending...';
@@ -215,18 +192,34 @@ function resendConfirmationEmails(meetingData) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            alert(`✅ Confirmation emails sent successfully to ${data.total_participants} participants!`);
+            // Update the button to show success and disable it
+            btn.textContent = '✅ Emails Sent Successfully!';
+            btn.style.background = '#4caf50';
+            btn.disabled = true;
+            
+            // Show success message
+            const successMessage = document.createElement('div');
+            successMessage.className = 'email-confirmation success';
+            successMessage.innerHTML = `
+                <h4>📧 Email Confirmation Sent</h4>
+                <p>✅ Confirmation emails sent to ${data.total_participants} participants</p>
+                <p><strong>Sent to:</strong> ${data.sent_emails.join(', ')}</p>
+            `;
+            
+            // Insert the success message before the action buttons
+            const actionButtons = btn.closest('.action-buttons');
+            actionButtons.parentNode.insertBefore(successMessage, actionButtons);
         } else {
             alert(`❌ Failed to send confirmation emails: ${data.error}`);
+            btn.disabled = false;
+            btn.textContent = '📧 Send Confirmation Emails';
         }
-        btn.disabled = false;
-        btn.textContent = '📧 Resend Confirmation Emails';
     })
     .catch(error => {
         console.error('Error:', error);
         alert('❌ Error sending confirmation emails');
         btn.disabled = false;
-        btn.textContent = '📧 Resend Confirmation Emails';
+        btn.textContent = '📧 Send Confirmation Emails';
     });
 }
 
