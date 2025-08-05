@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, jsonify, send_from_directory
 from database.db import get_chat_by_user_id, resolve_emails
 from agent import extract_meeting_details
-from email_utils import init_mail, send_meeting_confirmation_simple
+from email_utils import init_mail, send_meeting_confirmation
 from config import FLASK_HOST, FLASK_PORT, FLASK_DEBUG
 
 app = Flask(__name__, static_folder='static')
@@ -45,7 +45,7 @@ def schedule():
             
             # Send confirmation emails if meeting intent is detected
             if result.get("intent_detected") and result.get("emails"):
-                email_result = send_meeting_confirmation_simple(result, result["emails"])
+                email_result = send_meeting_confirmation(result, result["emails"])
                 result["email_confirmation"] = email_result
         
         return jsonify(result)
@@ -64,7 +64,7 @@ def send_confirmation():
             return jsonify({"error": "No participant emails provided"}), 400
         
         # Send confirmation emails
-        email_result = send_meeting_confirmation_simple(meeting_details, participant_emails)
+        email_result = send_meeting_confirmation(meeting_details, participant_emails)
         
         return jsonify(email_result)
     except Exception as e:

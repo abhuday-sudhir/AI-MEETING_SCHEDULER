@@ -28,6 +28,9 @@ function setupChatSwitching() {
             
             // Display messages for this chat
             displayMessages(chatData[userId] || []);
+            
+            // Reset AI panel to analyzing state for new chat
+            resetAIPanel();
         });
     });
 }
@@ -74,8 +77,19 @@ function analyzeChat() {
     btn.disabled = true;
     btn.textContent = '⏳ Analyzing...';
 
-    // Open AI panel
-    document.getElementById('ai-panel').classList.add('open');
+    // Open AI panel and show analyzing state immediately
+    const aiPanel = document.getElementById('ai-panel');
+    const aiContent = document.getElementById('ai-content');
+    
+    aiPanel.classList.add('open');
+    
+    // Show analyzing state immediately
+    aiContent.innerHTML = `
+        <div class="loading">
+            <div class="spinner"></div>
+            <p>Analyzing chat for meeting details...</p>
+        </div>
+    `;
 
     // Make API call
     fetch('/schedule', {
@@ -223,6 +237,22 @@ function displayAIError(error) {
             <strong>Analysis Error:</strong> ${error}
         </div>
     `;
+}
+
+function resetAIPanel() {
+    const aiPanel = document.getElementById('ai-panel');
+    const aiContent = document.getElementById('ai-content');
+    
+    // Reset the AI panel content to analyzing state
+    aiContent.innerHTML = `
+        <div class="loading">
+            <div class="spinner"></div>
+            <p>Analyzing chat for meeting details...</p>
+        </div>
+    `;
+    
+    // Close the AI panel if it's open
+    aiPanel.classList.remove('open');
 }
 
 function closeAIPanel() {

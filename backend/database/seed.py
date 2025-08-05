@@ -25,9 +25,9 @@ CREATE TABLE IF NOT EXISTS chats (
 
 # Seed users
 users = [
-    ("Raj", "raj@example.com"),
-    ("Aditi", "aditi@example.com"),
-    ("John", "john@example.com"),
+    ("Raj", "221b023@gmail.com"),
+    ("Aditi", "abhuday11sudhir@gmail.com"),
+    ("John", "abhuday.sudhir11@gmail.com"),
     ("Sarah", "sarah@example.com"),
     ("Mike", "mike@example.com"),
     ("Lisa", "lisa@example.com"),

@@ -2,6 +2,9 @@ import os
 from flask_mail import Mail, Message
 from flask import current_app
 from datetime import datetime
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Initialize Flask-Mail
 mail = Mail()
