@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Meeting Scheduler</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar with chat list -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h1>🤖 AI Meeting Scheduler</h1>
+            </div>
+            <div class="chat-list">
+                <div class="chat-item active" data-user-id="1" data-chat-name="Raj's Team Chat" data-avatar="R">
+                    <div class="chat-avatar">R</div>
+                    <div class="chat-info">
+                        <div class="chat-name">Raj's Team Chat</div>
+                        <div class="chat-preview">Let's meet tomorrow at 3 PM</div>
+                    </div>
+                </div>
+                <div class="chat-item" data-user-id="2" data-chat-name="Sarah's Group" data-avatar="S">
+                    <div class="chat-avatar">S</div>
+                    <div class="chat-info">
+                        <div class="chat-name">Sarah's Group</div>
+                        <div class="chat-preview">Meeting scheduled for Friday</div>
+                    </div>
+                </div>
+                <div class="chat-item" data-user-id="3" data-chat-name="Marketing Team" data-avatar="M">
+                    <div class="chat-avatar">M</div>
+                    <div class="chat-info">
+                        <div class="chat-name">Marketing Team</div>
+                        <div class="chat-preview">Weekly standup discussion</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main chat area -->
+        <div class="chat-area">
+            <div class="chat-header">
+                <div class="chat-header-left">
+                    <div class="current-chat-avatar" id="current-avatar">R</div>
+                    <div class="current-chat-info">
+                        <h3 id="current-chat-name">Raj's Team Chat</h3>
+                        <p id="current-chat-status">Online</p>
+                    </div>
+                </div>
+                <button class="schedule-btn" id="schedule-btn" onclick="analyzeChat()">
+                    📅 Schedule Meeting
+                </button>
+            </div>
+
+            <div class="messages-container" id="messages-container">
+                <!-- Messages will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Results Panel -->
+    <div class="ai-panel" id="ai-panel">
+        <div class="ai-header">
+            <h2>🧠 AI Analysis</h2>
+            <button class="close-ai" onclick="closeAIPanel()">×</button>
+        </div>
+        <div class="ai-content" id="ai-content">
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>Analyzing chat for meeting details...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Pass chat data from Flask to JavaScript
+        let chatData = {{ chats | tojson | safe }};
+    </script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html> 
